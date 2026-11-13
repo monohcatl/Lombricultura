@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#183b32">
+<meta name="description" content="Aula virtual de Lombricultura en casa, basada en el manual de Azoteas Verdes de Guadalajara (2013).">
+<title>Aula de Lombricultura en casa</title>
+<style>
+:root{
+  --forest:#183b32;--forest-2:#234e41;--leaf:#527a53;--sage:#dce8d8;--sage-2:#edf3e9;
+  --cream:#f5f2e9;--paper:#fffdf7;--ink:#25352e;--muted:#68766e;--line:#e5e5d8;
+  --ochre:#bd8644;--ochre-pale:#f6ead8;--coral:#c9785a;--shadow:0 16px 45px rgba(35,55,43,.09);
+  --radius:20px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55}
+button,input{font:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid #d6a65f;outline-offset:3px}
+[hidden]{display:none!important}
+/* Pantalla de acceso */
+.gate{min-height:100vh;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(360px,.9fr);background:var(--forest);overflow:hidden;position:relative}
+.gate-art{padding:clamp(36px,7vw,100px);display:flex;flex-direction:column;justify-content:space-between;position:relative;color:#f8f5e9;isolation:isolate}
+.gate-art:before,.gate-art:after{content:"";position:absolute;border:1px solid rgba(231,239,219,.13);border-radius:50%;z-index:-1}
+.gate-art:before{width:620px;height:620px;right:-200px;top:8%}
+.gate-art:after{width:420px;height:420px;right:-100px;top:21%}
+.brand{display:flex;gap:12px;align-items:center;font-weight:800;letter-spacing:.09em;font-size:13px;text-transform:uppercase}
+.brand-mark{width:39px;height:39px;border-radius:14px;background:#dbe8ce;display:grid;place-items:center;color:var(--forest)}
+.gate-copy{max-width:650px;margin:50px 0}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.18em;font-weight:800;color:#b7cfab}
+.gate h1{font-family:Georgia,serif;font-weight:500;font-size:clamp(44px,6vw,78px);line-height:1.03;letter-spacing:-.045em;margin:20px 0}
+.gate-copy p{font-size:17px;color:#d1ddcf;max-width:530px}
+.gate-quote{border-left:2px solid #d2a265;padding-left:17px;color:#e7e8d9;max-width:430px;font-family:Georgia,serif;font-size:17px}
+.gate-meta{font-size:12px;color:#b9c9b9;letter-spacing:.02em}
+.gate-illustration{position:absolute;width:min(40vw,520px);right:2%;bottom:4%;opacity:.95;pointer-events:none}
+.gate-panel{background:var(--paper);display:flex;align-items:center;justify-content:center;padding:36px;position:relative;z-index:1}
+.form-card{width:min(100%,430px)}
+.form-kicker{color:var(--leaf);font-size:11px;text-transform:uppercase;font-weight:800;letter-spacing:.16em}
+.form-card h2{font:500 34px/1.1 Georgia,serif;margin:12px 0 9px;color:var(--forest)}
+.form-intro{color:var(--muted);font-size:14px;margin:0 0 25px}
+.field{display:block;margin:0 0 16px}
+.field span{display:block;font-size:12px;font-weight:750;color:#40534a;margin:0 0 7px}
+.field input{width:100%;height:48px;border:1px solid #d9ded3;border-radius:12px;padding:0 14px;background:#fff;color:var(--ink);transition:.2s}
+.field input:focus{border-color:var(--leaf);outline:3px solid #dce8d8}
+.primary{border:0;background:var(--forest);color:#fff;border-radius:12px;padding:14px 19px;font-weight:750;transition:transform .18s,background .18s;display:inline-flex;align-items:center;justify-content:center;gap:10px}
+.primary:hover{background:#295745;transform:translateY(-1px)}
+.primary.full{width:100%;margin-top:6px}
+.privacy{font-size:11px;color:#718078;background:#f1f4ec;border-radius:12px;padding:12px 13px;margin-top:17px;line-height:1.5}
+.privacy strong{color:#42574b}
+/* Aplicación */
+.app{min-height:100vh;display:grid;grid-template-columns:265px minmax(0,1fr)}
+.sidebar{background:var(--forest);color:#edf1e6;padding:25px 17px 18px;display:flex;flex-direction:column;min-height:100vh;position:sticky;top:0;height:100vh;overflow:auto;z-index:4}
+.side-brand{display:flex;align-items:center;gap:11px;padding:2px 10px 27px;border-bottom:1px solid rgba(255,255,255,.12)}
+.side-brand .brand-mark{width:36px;height:36px;border-radius:12px;flex:none}
+.side-brand strong{display:block;font-size:12px;letter-spacing:.09em}
+.side-brand small{display:block;color:#b9cbb9;font-size:10px;margin-top:3px}
+.side-label{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#9eb59f;font-weight:800;padding:22px 12px 8px}
+.nav-list{display:grid;gap:4px}
+.nav-btn{border:0;background:transparent;color:#d8e2d5;text-align:left;padding:10px 11px;border-radius:11px;display:flex;align-items:center;gap:11px;font-size:12px;line-height:1.3;transition:.18s;width:100%}
+.nav-btn:hover{background:rgba(255,255,255,.09);color:#fff}
+.nav-btn.active{background:#e7eddd;color:var(--forest);font-weight:800}
+.nav-icon{width:23px;height:23px;display:grid;place-items:center;font-size:15px;flex:none}
+.nav-count{margin-left:auto;font-size:10px;opacity:.7}
+.side-bottom{margin-top:auto;padding:18px 10px 0;border-top:1px solid rgba(255,255,255,.12)}
+.student-chip{display:flex;align-items:center;gap:10px;margin-bottom:13px}
+.avatar{width:34px;height:34px;border-radius:50%;background:#d9e7cd;color:var(--forest);display:grid;place-items:center;font-weight:850;font-size:13px;flex:none}
+.student-chip strong{display:block;font-size:12px;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.student-chip small{display:block;color:#aebfae;font-size:10px}
+.text-btn{border:0;background:transparent;color:#b9cbb9;font-size:11px;padding:5px 0;text-decoration:underline;text-underline-offset:3px}
+.main{min-width:0}
+.topbar{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(20px,4vw,54px);background:rgba(255,253,247,.83);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3;backdrop-filter:blur(12px)}
+.breadcrumb{font-size:12px;color:var(--muted)}.breadcrumb strong{color:var(--forest)}
+.top-actions{display:flex;align-items:center;gap:12px}
+.progress-mini{display:flex;align-items:center;gap:9px;font-size:11px;color:var(--muted)}
+.progress-track{width:112px;height:6px;border-radius:10px;background:#e2e6da;overflow:hidden}
+.progress-fill{height:100%;width:0;background:var(--leaf);border-radius:10px;transition:width .3s}
+.menu-toggle{display:none;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 10px;color:var(--forest)}
+.content-wrap{max-width:1220px;margin:0 auto;padding:34px clamp(20px,4vw,54px) 70px}
+.welcome-line{display:flex;align-items:center;justify-content:space-between;gap:20px;color:var(--muted);font-size:12px;margin-bottom:17px}
+.hero{background:var(--forest);color:#f9f6eb;border-radius:25px;padding:clamp(26px,4vw,44px);display:grid;grid-template-columns:1.35fr .65fr;gap:20px;overflow:hidden;position:relative;box-shadow:var(--shadow)}
+.hero:after{content:"";position:absolute;width:380px;height:380px;border:1px solid rgba(239,245,224,.16);border-radius:50%;right:-100px;top:-165px;box-shadow:0 0 0 35px rgba(255,255,255,.025),0 0 0 75px rgba(255,255,255,.02)}
+.hero-copy{position:relative;z-index:1;max-width:670px}
+.hero .eyebrow{color:#c7d8b6}
+.hero h1{font:500 clamp(34px,4.2vw,53px)/1.05 Georgia,serif;letter-spacing:-.04em;margin:13px 0}
+.hero p{color:#d7e1d2;font-size:14px;max-width:580px;margin:0}
+.hero-meta{display:flex;flex-wrap:wrap;gap:18px;margin-top:23px;color:#dce5d7;font-size:11px}
+.hero-meta span{display:flex;align-items:center;gap:7px}
+.hero-art{display:flex;align-items:center;justify-content:center;position:relative;z-index:1;min-height:170px}
+.hero-art svg{width:min(100%,250px);height:auto}
+.section-heading{display:flex;align-items:end;justify-content:space-between;gap:15px;margin:34px 0 17px}
+.section-heading h2{font:500 27px/1.15 Georgia,serif;color:var(--forest);margin:0}
+.section-heading p{font-size:12px;color:var(--muted);margin:5px 0 0}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:18px}
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:15px;padding:16px 17px;display:flex;align-items:center;gap:13px}
+.stat-icon{width:38px;height:38px;background:var(--sage-2);border-radius:12px;display:grid;place-items:center;font-size:18px}
+.stat strong{display:block;font:500 22px Georgia,serif;color:var(--forest)}.stat small{display:block;color:var(--muted);font-size:10px}
+.module-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.module-card{border:1px solid var(--line);background:var(--paper);border-radius:17px;padding:19px;display:flex;gap:14px;align-items:flex-start;text-align:left;color:inherit;transition:.2s;min-width:0}
+.module-card:hover{transform:translateY(-2px);border-color:#b7c9b2;box-shadow:0 12px 25px rgba(30,55,42,.06)}
+.module-card.done{background:#f2f6ed}
+.module-emoji{width:43px;height:43px;border-radius:14px;background:var(--sage-2);display:grid;place-items:center;font-size:20px;flex:none}
+.module-card h3{font:500 18px/1.2 Georgia,serif;color:var(--forest);margin:1px 0 6px}
+.module-card p{font-size:11px;color:var(--muted);margin:0 0 11px;line-height:1.45}
+.module-foot{display:flex;align-items:center;gap:10px;color:#718078;font-size:10px}
+.module-foot .dot{width:6px;height:6px;border-radius:50%;background:#b9c5b4}.module-card.done .dot{background:#60935b}
+.source-note{font-size:11px;color:#7a8279;margin-top:23px;border-top:1px solid var(--line);padding-top:15px}
+/* Lecciones */
+.lesson-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:23px}
+.lesson-kicker{font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:var(--leaf);font-weight:850}
+.lesson-head h1{font:500 clamp(32px,4vw,46px)/1.07 Georgia,serif;color:var(--forest);letter-spacing:-.035em;margin:8px 0 9px}
+.lesson-head p{margin:0;color:var(--muted);font-size:13px;max-width:700px}
+.lesson-actions{display:flex;gap:9px;flex:none;padding-top:20px}
+.secondary{border:1px solid #d4dbce;background:var(--paper);color:var(--forest);border-radius:11px;padding:11px 13px;font-weight:750;font-size:11px}
+.secondary:hover{background:var(--sage-2)}
+.lesson-layout{display:grid;grid-template-columns:minmax(0,1fr) 235px;gap:17px;align-items:start}
+.lesson-main{min-width:0}
+.lesson-section{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:clamp(19px,3vw,30px);margin-bottom:14px}
+.lesson-section h2{font:500 23px/1.2 Georgia,serif;color:var(--forest);margin:0 0 12px}
+.lesson-section h3{font:650 15px/1.35 system-ui;color:var(--forest);margin:21px 0 8px}
+.lesson-section p{font-size:13px;color:#45544b;margin:0 0 12px}
+.lesson-section ul,.lesson-section ol{padding-left:20px;margin:8px 0 15px;color:#45544b;font-size:13px}
+.lesson-section li{margin:6px 0;padding-left:2px}
+.callout{background:var(--sage-2);border-left:3px solid var(--leaf);border-radius:0 12px 12px 0;padding:14px 16px;margin:16px 0;color:#3c5143;font-size:12px}
+.callout.ochre{background:var(--ochre-pale);border-color:var(--ochre);color:#665039}
+.callout strong{color:var(--forest)}
+.pill-row{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}
+.pill{background:#eef2e9;border:1px solid #dfe7d8;border-radius:999px;padding:6px 10px;font-size:10px;color:#48604d;font-weight:700}
+.data-table{width:100%;border-collapse:collapse;font-size:11px;margin:13px 0 7px;display:block;overflow-x:auto;white-space:nowrap}
+.data-table th{background:#eaf0e5;color:var(--forest);font-weight:800;text-align:left}
+.data-table th,.data-table td{padding:10px 11px;border-bottom:1px solid #e6e9df}
+.data-table td{color:#4d5a51;background:#fffefa}
+.diagram{background:#f2f5ec;border:1px solid #e3e9dc;border-radius:15px;padding:14px;margin:16px 0;overflow:hidden}
+.diagram svg{display:block;max-width:100%;height:auto;margin:auto}
+.diagram-caption{font-size:10px;color:#718078;text-align:center;margin:8px 0 0}
+.side-info{position:sticky;top:92px;display:grid;gap:12px}
+.info-card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:16px}
+.info-card h3{font:500 17px Georgia,serif;color:var(--forest);margin:0 0 9px}
+.info-card p,.info-card li{font-size:11px;color:var(--muted);margin:0 0 7px}
+.info-card ul{padding-left:16px;margin:7px 0}
+.lesson-progress{height:7px;background:#e9ede3;border-radius:10px;overflow:hidden;margin:8px 0}
+.lesson-progress span{display:block;height:100%;background:var(--leaf);border-radius:10px}
+.reflection{border:1px solid #e6e5d9;border-radius:13px;margin:12px 0;overflow:hidden}
+.reflection summary{cursor:pointer;padding:13px 15px;font-size:12px;font-weight:800;color:var(--forest);background:#fbfaf4}
+.reflection p{padding:0 15px 13px;margin:0;font-size:12px}
+.lesson-footer{display:flex;justify-content:space-between;gap:10px;margin:16px 0 4px}
+.complete-btn{border:0;background:var(--leaf);color:#fff;border-radius:12px;padding:13px 16px;font-size:11px;font-weight:800}
+.complete-btn.done{background:#e4eee0;color:#315a3b;border:1px solid #c9dcc3}
+.next-btn{border:1px solid #d4dbce;background:var(--paper);color:var(--forest);border-radius:12px;padding:13px 16px;font-size:11px;font-weight:800}
+/* Recursos */
+.resource-list{display:grid;gap:10px}
+.resource-item{display:flex;gap:12px;align-items:flex-start;background:#fffefa;border:1px solid var(--line);padding:13px;border-radius:12px}
+.resource-item span{font-size:18px}.resource-item strong{display:block;color:var(--forest);font-size:12px}.resource-item small{display:block;color:var(--muted);font-size:10px;margin-top:3px}
+.empty{color:var(--muted);font-size:12px;padding:20px;background:var(--paper);border:1px dashed #cbd4c7;border-radius:12px}
+.mobile-overlay{display:none}
+@media(max-width:1000px){.app{grid-template-columns:235px minmax(0,1fr)}.lesson-layout{grid-template-columns:1fr}.side-info{position:static;grid-template-columns:repeat(2,1fr)}.hero{grid-template-columns:1fr .45fr}}
+@media(max-width:760px){.gate{grid-template-columns:1fr}.gate-art{min-height:340px;padding:27px}.gate-copy{margin:35px 0 20px}.gate h1{font-size:48px}.gate-art .gate-meta{display:none}.gate-illustration{width:210px;right:-15px;bottom:0;opacity:.55}.gate-panel{padding:30px 22px 44px}.app{display:block}.sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-105%);transition:transform .25s;box-shadow:20px 0 50px rgba(0,0,0,.18)}.sidebar.open{transform:translateX(0)}.mobile-overlay.show{display:block;position:fixed;inset:0;background:rgba(10,25,18,.42);z-index:3}.menu-toggle{display:block}.topbar{height:64px;padding:0 17px}.content-wrap{padding:23px 17px 50px}.hero{grid-template-columns:1fr;padding:25px}.hero-art{display:none}.stats-grid{grid-template-columns:1fr 1fr}.stats-grid .stat:last-child{grid-column:1/-1}.module-grid{grid-template-columns:1fr}.lesson-head{display:block}.lesson-actions{padding-top:14px}.side-info{grid-template-columns:1fr 1fr}.progress-mini span.label{display:none}}
+@media(max-width:430px){.side-info{grid-template-columns:1fr}.stats-grid{grid-template-columns:1fr}.stats-grid .stat:last-child{grid-column:auto}.top-actions{gap:5px}.progress-track{width:70px}.lesson-footer{flex-direction:column}.lesson-footer button{width:100%}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<section class="gate" id="gate" aria-label="Registro al aula">
+  <div class="gate-art">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">🌱</span><span>Azoteas Verdes <span style="font-weight:400;opacity:.7">· Aula abierta</span></span></div>
+    <div class="gate-copy">
+      <div class="eyebrow">Aprendizaje para cultivar vida</div>
+      <h1>Lombricultura<br>en casa</h1>
+      <p>Un recorrido práctico para transformar los residuos orgánicos en alimento para el suelo y comprender el trabajo silencioso de las lombrices.</p>
+      <div class="gate-quote">«La lombriz es el paradigma entre la vida y la muerte: come productos en descomposición y los transforma en productos para la generación de vida».</div>
+    </div>
+    <div class="gate-meta">Basado en el <em>Manual de lombricultura en casa</em> · Azoteas Verdes de Guadalajara · 2013</div>
+    <svg class="gate-illustration" viewBox="0 0 440 330" fill="none" aria-hidden="true">
+      <path d="M60 275C130 238 178 247 225 267C275 290 326 287 397 238" stroke="#bdd0ad" stroke-width="2" opacity=".7"/>
+      <path d="M222 270C209 229 207 178 226 128C244 83 280 55 322 43" stroke="#bdd0ad" stroke-width="5" stroke-linecap="round"/>
+      <path d="M264 158C223 149 198 120 203 82C239 81 274 106 264 158Z" fill="#78966a" stroke="#dce8ce" stroke-width="2"/>
+      <path d="M268 156C269 113 295 83 339 78C350 117 314 154 268 156Z" fill="#9db68a" stroke="#dce8ce" stroke-width="2"/>
+      <path d="M225 126L263 155M270 155L331 86" stroke="#e6edda" stroke-width="1.5"/>
+      <path d="M118 275C118 244 142 222 178 223C206 224 221 244 218 267C215 291 192 301 168 297C145 293 119 294 118 275Z" fill="#c68a58" stroke="#efd4aa" stroke-width="2"/>
+      <path d="M136 247C155 234 180 238 194 251M129 264C151 252 181 257 204 270M136 282C155 271 181 276 197 288" stroke="#8c5738" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="178" cy="226" r="7" fill="#c68a58" stroke="#efd4aa" stroke-width="2"/>
+      <path d="M71 275C73 252 87 239 107 241C126 242 139 257 135 276" stroke="#aec49e" stroke-width="3" stroke-linecap="round"/>
+      <path d="M84 250C81 232 91 219 106 216M109 242C121 225 137 223 151 230" stroke="#aec49e" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="357" cy="205" r="4" fill="#d5a76b"/><circle cx="382" cy="220" r="3" fill="#d5a76b"/><circle cx="343" cy="233" r="3" fill="#d5a76b"/>
+    </svg>
+  </div>
+  <div class="gate-panel">
+    <form class="form-card" id="registration" autocomplete="on">
+      <div class="form-kicker">Antes de entrar al aula</div>
+      <h2>¡Te damos la bienvenida!</h2>
+      <p class="form-intro">Registra tus datos para abrir tu espacio de aprendizaje. Los campos son obligatorios.</p>
+      <label class="field"><span>Nombre</span><input id="studentName" name="name" type="text" placeholder="¿Cómo te llamas?" autocomplete="name" required maxlength="90"></label>
+      <label class="field"><span>Teléfono</span><input id="studentPhone" name="phone" type="tel" placeholder="Tu número de contacto" autocomplete="tel" inputmode="tel" required maxlength="25"></label>
+      <label class="field"><span>Correo electrónico</span><input id="studentEmail" name="email" type="email" placeholder="tunombre@correo.com" autocomplete="email" required maxlength="120"></label>
+      <button class="primary full" type="submit">Entrar al aula <span aria-hidden="true">→</span></button>
+      <div class="privacy"><strong>Sobre tus datos:</strong> esta versión funciona como un archivo HTML independiente. Tu nombre, teléfono, correo y avance se guardan solamente en el almacenamiento local de este navegador; no se envían a un servidor ni se comparten. Si abres el archivo en otro dispositivo o navegador, no aparecerán allí.</div>
+    </form>
+  </div>
+</section>
+
+<div class="app" id="app" hidden>
+  <aside class="sidebar" id="sidebar">
+    <div class="side-brand"><span class="brand-mark">🌱</span><div><strong>AZOTEAS VERDES</strong><small>Aula · Lombricultura en casa</small></div></div>
+    <div class="side-label">Tu aula</div>
+    <nav class="nav-list" id="courseNav" aria-label="Contenido del curso"></nav>
+    <div class="side-bottom">
+      <div class="student-chip"><span class="avatar" id="avatarInitial">A</span><div><strong id="sideStudentName">Estudiante</strong><small>Participante del aula</small></div></div>
+      <button class="text-btn" id="changeStudent">Cambiar datos / salir</button>
+    </div>
+  </aside>
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+  <main class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:12px"><button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰</button><div class="breadcrumb">Aula virtual <span aria-hidden="true">/</span> <strong id="crumb">Inicio</strong></div></div>
+      <div class="top-actions"><div class="progress-mini"><span class="label">Tu avance</span><div class="progress-track"><div class="progress-fill" id="topProgress"></div></div><strong id="topPercent">0%</strong></div></div>
+    </header>
+    <div class="content-wrap" id="view" tabindex="-1"></div>
+  </main>
+</div>
+
+<script>
+(() => {
+  'use strict';
+  const STORAGE_KEY = 'aulaLombricultura_v1';
+  const $ = (id) => document.getElementById(id);
+  let state = { profile: null, completed: [], active: 'home' };
+
+  const lessons = [
+    {
+      id:'residuos', icon:'♻️', title:'¿Qué es “basura”?', short:'Comprender el problema de los residuos y abrir posibilidades para transformarlos.', time:'12 min',
+      intro:'El manual propone mirar de otra manera aquello que solemos desechar: buena parte de los residuos puede recuperar una utilidad.',
+      content:`
+      <section class="lesson-section"><h2>La basura también es una decisión</h2><p>El manual plantea que la basura es un invento humano: usamos esa palabra para nombrar lo que ya no consideramos útil. Sin embargo, señala que a más del 80% de las cosas que llamamos basura podríamos encontrarles una utilidad, e incluso transformarlas en tierra para nuestras plantas.</p><p>El problema no termina cuando dejamos una bolsa en el contenedor. Los residuos se reúnen en vertederos y forman acumulaciones que permanecen durante mucho tiempo.</p><div class="callout"><strong>Idea clave del capítulo:</strong> separar los residuos orgánicos en casa permite aprovecharlos y facilita el reciclaje de los demás materiales.</div></section>
+      <section class="lesson-section"><h2>¿Qué ocurre en un vertedero?</h2><p>De acuerdo con el manual, los restos orgánicos se descomponen en condiciones poco favorables cuando se acumulan sin suficiente oxígeno y en contacto con materiales inorgánicos o tóxicos.</p><ul><li>Se generan lixiviados: líquidos que pueden arrastrar contaminantes hacia las aguas subterráneas.</li><li>La descomposición sin oxígeno puede producir gases como metano y dióxido de carbono.</li><li>El manual también menciona gases tóxicos y la liberación de productos clorados durante incendios en vertederos.</li></ul><div class="callout ochre"><strong>Una cifra del manual:</strong> los residuos orgánicos pueden representar más del 50% del total de los residuos domésticos. Separarlos puede reducir considerablemente lo que enviamos al vertedero.</div></section>
+      <section class="lesson-section"><h2>De residuo a recurso</h2><p>Los restos de frutas y verduras, café, cáscaras de huevo, hojas, pasto y podas son materia orgánica. En un ambiente con oxígeno, lombrices y microorganismos pueden transformarla mediante el lombricompostaje.</p><div class="diagram"><svg viewBox="0 0 650 160" role="img" aria-label="Ciclo de transformación de residuos orgánicos en humus y plantas"><rect x="8" y="28" width="145" height="100" rx="16" fill="#e1ebd9"/><text x="80" y="67" text-anchor="middle" font-size="28">🥬</text><text x="80" y="96" text-anchor="middle" font-size="13" fill="#264b3b" font-weight="700">Restos orgánicos</text><path d="M160 78H220m-9-8 9 8-9 8" stroke="#6b8c63" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="230" y="28" width="180" height="100" rx="16" fill="#f4e6d2"/><text x="320" y="67" text-anchor="middle" font-size="28">🪱</text><text x="320" y="96" text-anchor="middle" font-size="13" fill="#6a4e32" font-weight="700">Lombricompostaje</text><path d="M418 78H478m-9-8 9 8-9 8" stroke="#6b8c63" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="488" y="28" width="154" height="100" rx="16" fill="#dfead9"/><text x="565" y="67" text-anchor="middle" font-size="28">🌿</text><text x="565" y="96" text-anchor="middle" font-size="13" fill="#264b3b" font-weight="700">Humus y plantas</text></svg><p class="diagram-caption">Esquema didáctico del proceso descrito en el manual.</p></div></section>
+      <section class="lesson-section"><h2>Comprueba tu comprensión</h2><details class="reflection"><summary>¿Por qué separar los residuos orgánicos en casa?</summary><p>Porque pueden aprovecharse mediante procesos como el lombricompostaje, se reduce la cantidad de residuos que llega al vertedero y se facilita la recuperación de otros materiales.</p></details><details class="reflection"><summary>¿Qué diferencia hay entre descomposición con y sin oxígeno?</summary><p>El manual explica que, en los vertederos, la falta de oxígeno favorece una descomposición putrefacta y la formación de lixiviados y gases. En el lombricompostaje se busca un ambiente aerobio, con oxígeno.</p></details></section>`
+    },
+    {
+      id:'separacion', icon:'🗂️', title:'Separación y las 5 R', short:'Distinguir residuos orgánicos, inorgánicos y de manejo especial.', time:'12 min',
+      intro:'Antes de aprovechar los residuos, conviene reconocer de qué están hechos y qué destino pueden tener.',
+      content:`
+      <section class="lesson-section"><h2>¿Cómo propone separar los residuos el manual?</h2><p>El documento organiza los residuos en tres grandes grupos. Esta clasificación ayuda a identificar qué materiales pueden aprovecharse y cuáles requieren un manejo distinto.</p><h3>1. Residuos orgánicos</h3><p>Son los desperdicios de origen animal y vegetal. El manual ilustra, entre otros: restos de comida sin bolsa, huesos, restos de carne, verduras, pan, cáscaras de frutas y verduras, sopa, cascarones de huevo, servilletas usadas, filtros de café, café y té, animales muertos, heces, podas, flores, pasto, ramas y corcho natural.</p><h3>2. Residuos inorgánicos</h3><p>Se separan por material base —vidrio, plástico, metal, papel y cartón—, además de los residuos sanitarios y varios.</p><h3>3. Residuos de manejo especial</h3><p>El manual incluye pilas, celulares, cartuchos de tóner, llantas, aceites usados, residuos automotrices, de curación y de construcción.</p><div class="callout ochre"><strong>Importante:</strong> que un material aparezca clasificado como orgánico no significa que el manual lo recomiende automáticamente como alimento para las lombrices. La clasificación de residuos y la selección de alimento son temas distintos.</div></section>
+      <section class="lesson-section"><h2>De las 3 a las 5 R</h2><p>El manual presenta las tres erres tradicionales —reducir, reutilizar y reciclar— y añade dos acciones previas: razonar y rechazar.</p><div class="pill-row"><span class="pill">01 · Razonar</span><span class="pill">02 · Reducir</span><span class="pill">03 · Rechazar</span><span class="pill">04 · Reutilizar</span><span class="pill">05 · Reciclar</span></div><h3>Razonar</h3><p>Aprender a distinguir necesidades y caprichos; elegir lo que hace bien a las personas y al ambiente y pensar antes de comprar.</p><h3>Reducir</h3><p>Disminuir el consumo y preguntarnos si realmente necesitamos tantas cosas.</p><h3>Rechazar</h3><p>No aceptar productos que contaminen el suelo y el agua, exploten trabajo en condiciones indignas, destruyan selvas o dañen la salud.</p><h3>Reutilizar</h3><p>Dar otro uso a aquello que todavía sirve y evitar los envases descartables.</p><h3>Reciclar</h3><p>El manual lo presenta como la última acción, cuando el producto ya dio todo lo que podía ofrecer en su uso anterior.</p><div class="callout"><strong>Para recordar:</strong> el mejor residuo es aquel cuya generación pudimos evitar.</div></section>
+      <section class="lesson-section"><h2>Una pequeña práctica</h2><details class="reflection"><summary>Piensa en un residuo cotidiano: ¿qué R podrías aplicar antes de reciclarlo?</summary><p>Por ejemplo, antes de reciclar un frasco, podemos razonar si lo necesitamos, reducir la compra de nuevos envases, rechazar empaques innecesarios y reutilizar el frasco. El reciclaje queda como una opción posterior.</p></details></section>`
+    },
+    {
+      id:'composta', icon:'🍂', title:'Composta y lombricomposta', short:'Reconocer qué tienen en común y qué distingue a los dos procesos.', time:'10 min',
+      intro:'Ambos procesos aprovechan la descomposición biológica de la materia orgánica y producen materiales útiles para el suelo y las plantas.',
+      content:`
+      <section class="lesson-section"><h2>¿Qué es la composta?</h2><p>El compost o composta es el producto resultante de la descomposición biológica de desechos orgánicos. El manual la presenta como un producto que puede utilizarse en agricultura urbana: como abono mejorador de suelos o como sustrato para producir plantas.</p><p>La técnica sigue un proceso que ocurre en la naturaleza para formar humus. El documento señala que el compostaje puede lograr en alrededor de 90 días —o incluso menos— un resultado que en condiciones naturales podría tomar varios meses o años.</p></section>
+      <section class="lesson-section"><h2>¿Qué es la lombricomposta?</h2><p>Es un proceso parecido al compostaje tradicional, pero incorpora un organismo macro: en este caso, la lombriz roja californiana. El manual describe la lombricultura como una biotecnología que aprovecha residuos orgánicos y los transforma en un producto de valor nutricional para las plantas.</p><div class="diagram"><svg viewBox="0 0 620 188" role="img" aria-label="Comparación esquemática entre composta y lombricomposta"><rect x="16" y="20" width="270" height="145" rx="17" fill="#e9efdf"/><text x="151" y="51" text-anchor="middle" font-size="16" font-weight="700" fill="#244b3a">COMPOSTA</text><text x="151" y="85" text-anchor="middle" font-size="27">🍃 + ☀️</text><text x="151" y="115" text-anchor="middle" font-size="12" fill="#506253">Materia orgánica</text><text x="151" y="134" text-anchor="middle" font-size="12" fill="#506253">y descomposición biológica</text><rect x="334" y="20" width="270" height="145" rx="17" fill="#f5e9d8"/><text x="469" y="51" text-anchor="middle" font-size="16" font-weight="700" fill="#654b30">LOMBRICOMPOSTA</text><text x="469" y="85" text-anchor="middle" font-size="27">🍂 + 🪱</text><text x="469" y="115" text-anchor="middle" font-size="12" fill="#71573e">Materia orgánica</text><text x="469" y="134" text-anchor="middle" font-size="12" fill="#71573e">y lombriz roja californiana</text></svg><p class="diagram-caption">Comparación conceptual a partir de las definiciones del manual.</p></div><h3>Productos y aprovechamientos que menciona el texto</h3><ul><li>Abono orgánico conocido como humus o casting.</li><li>Proteína animal a partir de la lombriz, en forma de harina o fresca.</li><li>Aprovechamiento y control de residuos orgánicos.</li></ul></section>
+      <section class="lesson-section"><h2>¿Por qué es importante la lombriz?</h2><p>El manual le atribuye funciones relacionadas con la fertilidad y la estructura del suelo:</p><ul><li>Mejora la disponibilidad de nutrientes y la estructura del suelo.</li><li>Favorece la penetración de oxígeno y agua hacia las raíces.</li><li>Mezcla partículas minerales con materia orgánica.</li><li>Incrementa la actividad microbiana y las interacciones entre organismos del suelo.</li></ul><details class="reflection"><summary>¿Cuál es la diferencia central entre composta y lombricomposta?</summary><p>La lombricomposta incorpora lombrices —el manual destaca la roja californiana— al proceso de transformación de la materia orgánica. La composta se describe como descomposición biológica sin destacar ese componente macro.</p></details></section>`
+    },
+    {
+      id:'historia', icon:'📜', title:'Lombricultura: una historia', short:'Un recorrido por la relación entre las sociedades humanas y las lombrices.', time:'8 min',
+      intro:'La lombriz ha sido observada y valorada por su relación con la fertilidad del suelo desde la Antigüedad.',
+      content:`
+      <section class="lesson-section"><h2>Una historia larga bajo nuestros pies</h2><p>El capítulo histórico del manual reúne referencias a distintas épocas y personas que estudiaron o valoraron a las lombrices. Esta cronología sigue la narración del documento de 2013.</p><div class="resource-list">
+      <div class="resource-item"><span>🏺</span><div><strong>Hace más de 3,000 años a. C. · Sumeria</strong><small>El manual señala que se observaba la densidad de lombrices como indicador de la calidad de los suelos de cultivo.</small></div></div>
+      <div class="resource-item"><span>𓂀</span><div><strong>Antiguo Egipto</strong><small>La lombriz era considerada un animal valioso; el texto menciona castigos rigurosos para quien intentara exportarla.</small></div></div>
+      <div class="resource-item"><span>🏛️</span><div><strong>Antigua Grecia · Aristóteles</strong><small>El manual recupera su idea de que las lombrices eran como los intestinos de la tierra y contribuían a su productividad.</small></div></div>
+      <div class="resource-item"><span>📚</span><div><strong>Carlos Linneo (1700–1778)</strong><small>El documento lo menciona por sus escritos sobre las lombrices.</small></div></div>
+      <div class="resource-item"><span>🌿</span><div><strong>1775 · Sir Gilbert White</strong><small>Publicó, según el manual, el libro <em>La lombriz promotora de la vegetación</em>.</small></div></div>
+      <div class="resource-item"><span>🔬</span><div><strong>Charles Darwin (1809–1882)</strong><small>Estudió las lombrices y escribió <em>La producción de tierra vegetal por medio de las lombrices</em>.</small></div></div>
+      <div class="resource-item"><span>📖</span><div><strong>1900 · Dr. George Sheffield</strong><small>El manual le atribuye la continuación de los estudios de Darwin en <em>Nuestra amiga la Lombriz</em>.</small></div></div>
+      <div class="resource-item"><span>🪱</span><div><strong>1930 · Thomas Barret</strong><small>Inició un proceso de domesticación que, después de 16 años de trabajo, permitió criar lombrices en cautiverio.</small></div></div>
+      <div class="resource-item"><span>📍</span><div><strong>Década de 1980 · América Latina</strong><small>El manual sitúa en esos años la introducción de la lombricultura en la región.</small></div></div>
+      <div class="resource-item"><span>🌱</span><div><strong>1997 y 2004 · Jalisco</strong><small>El documento menciona el inicio de actividades en la Universidad de Guadalajara en 1997 y a Fundación Produce Jalisco en 2004.</small></div></div>
+      </div><div class="callout ochre"><strong>Nota de lectura:</strong> esta cronología reproduce la narración del manual. No es una verificación histórica independiente de cada fecha o atribución.</div></section>
+      <section class="lesson-section"><h2>Una invitación a observar</h2><p>La historia nos recuerda que la salud del suelo puede leerse también desde los organismos que lo habitan. Observar la presencia de lombrices, su alimento y sus condiciones de vida es una forma de aprender del propio agroecosistema.</p><details class="reflection"><summary>¿Qué relación plantea el manual entre lombrices y fertilidad?</summary><p>La presencia y actividad de las lombrices se relaciona con la mezcla de materia orgánica y suelo, el movimiento de agua y oxígeno y el incremento de la actividad microbiana.</p></details></section>`
+    },
+    {
+      id:'lombriz', icon:'🪱', title:'Conociendo a la lombriz', short:'Identificar tipos, especies utilizadas y características de su cuerpo.', time:'14 min',
+      intro:'No todas las lombrices viven en el mismo lugar ni se alimentan de la misma manera. Para la lombricultura interesan especialmente las especies superficiales.',
+      content:`
+      <section class="lesson-section"><h2>¿Todas las lombrices son iguales?</h2><p>El manual distingue tres formas de vida de las lombrices según sus hábitos y el lugar donde habitan:</p><ul><li><strong>Epígeas:</strong> viven en la superficie, donde hay abundante materia orgánica, y se alimentan de ella.</li><li><strong>Anécicas:</strong> hacen galerías desde la superficie hacia el interior del suelo y mezclan materia orgánica con partículas minerales.</li><li><strong>Endógeas:</strong> viven en capas más profundas, cavan galerías y consumen materia orgánica mezclada con el suelo.</li></ul><div class="callout">Las lombrices utilizadas para degradar materia orgánica son las de hábitos superficiales, polihúmicas y epígeas, según la descripción del manual.</div></section>
+      <section class="lesson-section"><h2>Especies mencionadas</h2><p>El documento enumera las siguientes especies empleadas en lombricultura:</p><div class="pill-row"><span class="pill">Roja californiana</span><span class="pill">Roja africana</span><span class="pill">Roja de Taiwán</span><span class="pill">Roja o nocturna</span></div><ul><li>Roja californiana: <em>Eisenia foetida foetida</em> y <em>Eisenia foetida andrei</em>.</li><li>Roja africana: <em>Eudrilus eugeniae</em>.</li><li>Roja de Taiwán: <em>Perionyx excavatus</em>.</li><li>Roja o nocturna: <em>Lumbricus rubellus</em> (la grafía aparece con una variación en el texto escaneado).</li></ul><p>El manual centra su explicación en la lombriz roja californiana, que identifica como <em>Eisenia foetida</em>.</p></section>
+      <section class="lesson-section"><h2>El cuerpo de la lombriz</h2><p>La lombriz tiene un cuerpo alargado, cilíndrico y anillado. Su longitud varía según la especie. El manual describe una fina cutícula que contribuye a protegerla de la desecación.</p><div class="diagram"><svg viewBox="0 0 660 190" role="img" aria-label="Ilustración esquemática de una lombriz con clitelo y segmentos"><path d="M42 110C58 68 91 55 126 76C163 99 187 127 222 113C256 99 274 65 313 69C351 73 366 117 405 119C449 121 466 79 503 76C541 74 565 108 611 101" stroke="#a95f40" stroke-width="29" fill="none" stroke-linecap="round"/><path d="M42 110C58 68 91 55 126 76C163 99 187 127 222 113C256 99 274 65 313 69C351 73 366 117 405 119C449 121 466 79 503 76C541 74 565 108 611 101" stroke="#d99a70" stroke-width="21" fill="none" stroke-linecap="round"/><g stroke="#965538" stroke-width="2" opacity=".65"><path d="M88 75l-8 36M111 75l-8 43M135 84l-9 41M160 98l-9 39M185 111l-4 28M240 103l5 35M263 80l12 42M292 70l9 45M333 78l5 45M363 105l-3 31M425 105l12 34M453 85l12 43M481 76l9 44M523 79l12 45M551 95l10 36"/></g><path d="M268 74C284 57 323 59 341 80L347 105C321 122 287 119 268 101Z" fill="#8e4d37" stroke="#f1c59f" stroke-width="2"/><path d="M306 61V25" stroke="#4c7250" stroke-width="2"/><text x="306" y="18" text-anchor="middle" fill="#34523e" font-size="13" font-weight="700">Clitelo</text><path d="M47 101L35 58" stroke="#4c7250" stroke-width="2"/><text x="34" y="47" fill="#34523e" font-size="12" font-weight="700">Región anterior</text><path d="M605 99L620 54" stroke="#4c7250" stroke-width="2"/><text x="620" y="42" text-anchor="end" fill="#34523e" font-size="12" font-weight="700">Región posterior</text><text x="330" y="174" text-anchor="middle" fill="#718078" font-size="11">Esquema didáctico, no a escala.</text></svg><p class="diagram-caption">La zona glandular llamada clitelo se reconoce en la lombriz adulta.</p></div><h3>¿Qué es el clitelo?</h3><p>Es una región glandular relacionada con la reproducción. Produce una sustancia mucosa que forma los capullos o cocones. Su presencia permite reconocer que la lombriz ha llegado a la madurez sexual.</p><h3>Respiración y humedad</h3><p>El manual explica que el intercambio de oxígeno ocurre a través de la pared del cuerpo. Por eso la humedad y las condiciones del ambiente son importantes para su supervivencia.</p></section>
+      <section class="lesson-section"><h2>Comprueba tu comprensión</h2><details class="reflection"><summary>¿Qué tipo de lombriz interesa para degradar residuos orgánicos?</summary><p>Las de hábitos superficiales, epígeas y polihúmicas, porque viven donde se acumula la materia orgánica.</p></details><details class="reflection"><summary>¿Qué nos indica la presencia del clitelo?</summary><p>Que la lombriz ha alcanzado la madurez sexual y está en etapa reproductiva.</p></details></section>`
+    },
+    {
+      id:'habitat', icon:'🌡️', title:'Hábitat y ciclo de vida', short:'Reconocer las condiciones que influyen en el bienestar y reproducción de las lombrices.', time:'15 min',
+      intro:'La temperatura, la humedad, el pH, la luz y la alimentación influyen en la vida de la lombriz roja californiana.',
+      content:`
+      <section class="lesson-section"><h2>Un hábitat sensible</h2><p>El manual señala que la lombriz roja californiana habita en los primeros 50 cm del suelo y es susceptible a los cambios del ambiente. Es fotofóbica: la radiación ultravioleta puede perjudicarla gravemente. También pueden afectarla la humedad excesiva, la acidez y una alimentación incorrecta.</p><p>El documento destaca tres parámetros que el lombricultor debe observar: temperatura, humedad y alimentación adecuada. También presenta una tabla de valores de pH, temperatura y humedad.</p></section>
+      <section class="lesson-section"><h2>Valores consignados en el manual</h2><p>La tabla siguiente conserva la secuencia de zonas y cifras que aparecen en el cuadro del manual. No debe leerse como una recomendación técnica universal; el propio documento es una edición de 2013 y conviene contrastar estos datos antes de utilizarlos como especificación de manejo.</p><table class="data-table"><thead><tr><th>Parámetro</th><th>Muerte</th><th>Letargo</th><th>Prod. humus</th><th>Fase óptima</th><th>Prod. humus</th><th>Letargo</th><th>Muerte</th></tr></thead><tbody><tr><th>pH</th><td>&lt;5</td><td>6.5</td><td>6.8</td><td>7.5</td><td>8</td><td>8.5</td><td>&gt;9</td></tr><tr><th>Temperatura</th><td>0</td><td>7</td><td>14</td><td>19–20</td><td>27</td><td>33</td><td>&gt;42</td></tr><tr><th>Humedad</th><td>&lt;50</td><td>75</td><td>80</td><td>82.5</td><td>85</td><td>88</td><td>&gt;90</td></tr></tbody></table><p style="font-size:10px;color:#79837b">Transcripción del cuadro de la página 14 del manual. Las unidades no están impresas junto a cada cifra en el cuadro original.</p><div class="callout ochre"><strong>Lectura cuidadosa:</strong> el texto también menciona como condiciones cómodas la temperatura, la humedad y la alimentación, pero no desarrolla una guía completa de medición ni un protocolo de corrección.</div></section>
+      <section class="lesson-section"><h2>¿Qué pasa cuando cambian las condiciones?</h2><p>El manual describe una secuencia de respuestas ante condiciones cada vez más adversas:</p><ol><li><strong>Producción de humus sin reproducción:</strong> la población se estanca; no aparecen nuevos capullos.</li><li><strong>Letargo:</strong> las lombrices se alimentan para sobrevivir, pero dejan de reproducirse y producir humus.</li><li><strong>Muerte:</strong> puede ocurrir cuando las condiciones llegan a extremos.</li></ol></section>
+      <section class="lesson-section"><h2>El ciclo de vida</h2><p>Las lombrices son hermafroditas imperfectas: cada individuo posee órganos reproductores masculinos y femeninos, pero necesita aparearse con otra lombriz de su especie para intercambiar esperma.</p><div class="diagram"><svg viewBox="0 0 650 180" role="img" aria-label="Etapas del ciclo de vida de la lombriz según el manual"><g fill="#e4ecdc" stroke="#9cb392" stroke-width="1.5"><circle cx="80" cy="76" r="43"/><circle cx="242" cy="76" r="43"/><circle cx="405" cy="76" r="43"/><circle cx="568" cy="76" r="43"/></g><g font-size="23" text-anchor="middle"><text x="80" y="84">🪱</text><text x="242" y="84">🥚</text><text x="405" y="84">🐛</text><text x="568" y="84">🪱</text></g><g stroke="#6c8b60" stroke-width="2" fill="none"><path d="M125 76H195m-8-7 8 7-8 7M287 76H358m-8-7 8 7-8 7M450 76H521m-8-7 8 7-8 7"/></g><g fill="#34523e" font-size="12" text-anchor="middle" font-weight="700"><text x="80" y="139">Acoplamiento</text><text x="242" y="139">Capullo</text><text x="405" y="139">Eclosión</text><text x="568" y="139">Adultez</text></g><g fill="#718078" font-size="10" text-anchor="middle"><text x="80" y="155">Cada 7–10 días</text><text x="242" y="155">Incubación: 18–23 días</text><text x="405" y="155">2–21 lombrices</text><text x="568" y="155">75–120 días aprox.</text></g></svg><p class="diagram-caption">Esquema basado en las cifras que presenta el manual para Eisenia foetida.</p></div><ul><li>Después del acoplamiento, cada individuo forma una cápsula o capullo amarillento de aproximadamente 2 mm.</li><li>La eclosión ocurre entre 18 y 23 días, dependiendo de la alimentación y los cuidados.</li><li>De cada capullo pueden emerger entre 2 y 21 lombrices.</li><li>El manual indica que alcanzan el estado adulto entre 75 y 120 días y que, en condiciones adecuadas, pueden vivir hasta 16 años.</li></ul></section>
+      <section class="lesson-section"><h2>Comprueba tu comprensión</h2><details class="reflection"><summary>¿Por qué es importante evitar el sol directo de la tarde?</summary><p>El manual señala que la lombriz es fotofóbica y que los rayos ultravioletas pueden perjudicarla gravemente. En el capítulo de cuidados recomienda un sitio con sol matutino y sin exposición al sol de la tarde.</p></details><details class="reflection"><summary>¿Cuánto tarda en eclosionar un capullo?</summary><p>El manual reporta un periodo aproximado de 18 a 23 días, sujeto a la alimentación y a las condiciones de pH, humedad y temperatura.</p></details></section>`
+    },
+    {
+      id:'alimentacion', icon:'🥕', title:'Alimentación', short:'Conocer los materiales orgánicos que el manual menciona como alimento.', time:'8 min',
+      intro:'La lombriz roja californiana se alimenta de materia orgánica en descomposición. La calidad de su alimento influye en su desarrollo.',
+      content:`
+      <section class="lesson-section"><h2>¿Qué come la lombriz?</h2><p>El manual describe a la lombriz californiana como un organismo que se alimenta de residuos orgánicos de origen animal y vegetal. Antes de ingerir tejidos vegetales, los humedece con un líquido que realiza una predigestión.</p><p>Entre los materiales que el documento menciona están:</p><ul><li>Estiércoles y desechos agropecuarios.</li><li>Rastrojos de cultivos.</li><li>Residuos de hortalizas y frutas.</li><li>Malezas y otros restos vegetales.</li><li>Desechos orgánicos de la industria, la ciudad y rastros.</li></ul><div class="callout ochre"><strong>Alcance del manual:</strong> el capítulo presenta categorías generales, pero no incluye una lista exhaustiva de alimentos permitidos y prohibidos, ni un protocolo de preparación de cada material.</div></section>
+      <section class="lesson-section"><h2>¿En qué se transforma el alimento?</h2><p>El texto indica que entre 30 y 40% de lo que consume la lombriz se utiliza en su metabolismo, mientras que entre 60 y 70% se transforma en humus.</p><div class="diagram"><svg viewBox="0 0 620 170" role="img" aria-label="Distribución aproximada del alimento consumido por las lombrices"><rect x="30" y="48" width="560" height="46" rx="12" fill="#e6e9df"/><path d="M42 48H198V94H42Q30 94 30 82V60Q30 48 42 48Z" fill="#d3a36f"/><path d="M198 48H578Q590 48 590 60V82Q590 94 578 94H198Z" fill="#719365"/><text x="114" y="76" text-anchor="middle" fill="#fff" font-size="13" font-weight="800">30–40%</text><text x="394" y="76" text-anchor="middle" fill="#fff" font-size="13" font-weight="800">60–70%</text><text x="114" y="120" text-anchor="middle" fill="#6b5136" font-size="12">Metabolismo</text><text x="394" y="120" text-anchor="middle" fill="#456044" font-size="12">Transformado en humus</text><text x="310" y="151" text-anchor="middle" fill="#788278" font-size="10">Proporciones reportadas por el manual.</text></svg></div></section>
+      <section class="lesson-section"><h2>Una recomendación para el manejo</h2><p>El capítulo de enfermedades señala que un exceso de proteínas en el alimento puede provocar un trastorno fisiológico llamado “gozzo ácido”. Por ello, el propio manual vincula una alimentación incorrecta con problemas de salud para el cultivo.</p><details class="reflection"><summary>¿Qué parte del alimento se transforma en humus según el texto?</summary><p>El manual indica que aproximadamente entre 60 y 70% de lo que consumen se transforma en humus; el resto, entre 30 y 40%, se utiliza en el metabolismo de la lombriz.</p></details></section>`
+    },
+    {
+      id:'salud', icon:'🛡️', title:'Enfermedades, plagas y enemigos', short:'Reconocer los trastornos y organismos que el manual identifica como amenazas.', time:'8 min',
+      intro:'La prevención comienza con la observación y el cuidado de las condiciones de alimentación y del entorno.',
+      content:`
+      <section class="lesson-section"><h2>Trastornos fisiológicos</h2><p>El manual señala que no se conoce una enfermedad propia de la lombriz en el contexto que describe, aunque pueden aparecer trastornos fisiológicos cuando la alimentación no se cuida suficientemente.</p><p>El más conocido es el llamado “gozzo ácido”, que el documento relaciona con la intoxicación provocada por un exceso de proteínas en el alimento.</p><div class="callout"><strong>Aprendizaje:</strong> evitar desequilibrios en la alimentación y observar las respuestas de las lombrices es parte del cuidado cotidiano.</div></section>
+      <section class="lesson-section"><h2>La planaria</h2><p>La principal plaga que identifica el manual es la planaria, un gusano plano perteneciente a los platelmintos. Describe su cabeza con forma de hacha o martillo y bandas dorsales a lo largo del cuerpo. Según el texto, depreda a la lombriz mediante un tubo con el que succiona líquidos vitales.</p></section>
+      <section class="lesson-section"><h2>Otros enemigos</h2><p>El documento menciona mamíferos, aves e insectos que pueden atacar el cultivo, especialmente:</p><div class="pill-row"><span class="pill">Ratas</span><span class="pill">Aves</span><span class="pill">Hormigas</span><span class="pill">Planarias</span></div><p>El manual señala que estos ataques se relacionan con descuidos de la persona que cuida el lombricompostador. No desarrolla un protocolo detallado de control de cada organismo.</p><details class="reflection"><summary>¿Qué factores conviene revisar primero si el cultivo presenta problemas?</summary><p>De acuerdo con los temas del manual: alimentación, humedad, temperatura, acidez del medio y condiciones generales del lecho; también conviene observar la presencia de planarias, ratas, aves u hormigas.</p></details></section>`
+    },
+    {
+      id:'humus', icon:'🌾', title:'Usos de la lombriz y del humus', short:'Comprender qué es el humus y por qué se utiliza para nutrir y reparar suelos.', time:'11 min',
+      intro:'El producto central de la lombricultura es el humus, resultado de la descomposición de materia orgánica y de la actividad de las lombrices.',
+      content:`
+      <section class="lesson-section"><h2>Usos de la lombriz</h2><p>El manual enumera tres usos principales:</p><ul><li>Producción de humus.</li><li>Obtención de proteína, en forma de harina de lombriz o lombriz fresca.</li><li>Obtención de productos farmacéuticos, como colágeno y elastina.</li></ul><div class="callout ochre"><strong>Contexto:</strong> el documento menciona estos aprovechamientos como posibilidades de la lombricultura; no ofrece procedimientos para procesar lombrices ni para elaborar productos farmacéuticos.</div></section>
+      <section class="lesson-section"><h2>¿Qué es el humus?</h2><p>El humus de lombriz es una sustancia generalmente oscura —su color puede variar según el origen de la materia orgánica— formada por las excretas de las lombrices. El manual explica que sus componentes son asimilables para las plantas y que las sustancias nutritivas quedan disponibles para ser tomadas por las raíces.</p><p>También destaca la presencia de microorganismos y de sustancias relacionadas con el desarrollo vegetal, como giberelinas y auxinas, que el texto atribuye a microorganismos que viven en el intestino de la lombriz.</p><h3>La carga microbiana</h3><p>El documento utiliza la expresión “carga microbiana” para hablar de la concentración o cantidad de bacterias y otros microorganismos del humus. Sostiene que una mayor presencia de microorganismos beneficiosos contribuye a la descomposición de materia orgánica y al desarrollo de las plantas.</p><div class="callout">El manual ofrece una descripción sensorial sencilla: un buen humus se ve como tierra y huele a tierra.</div></section>
+      <section class="lesson-section"><h2>Datos que presenta el cuadro del manual</h2><p>La publicación incorpora un cuadro físico-bacteriológico y de metales pesados. Algunos rótulos y unidades aparecen poco claros en la reproducción digital; por eso se señalan como datos transcritos del documento y no como una norma de calidad vigente.</p><table class="data-table"><thead><tr><th>Indicador</th><th>Valor reportado</th></tr></thead><tbody><tr><td>pH</td><td>6.8 a 7.5</td></tr><tr><td>Nitrógeno</td><td>1.5 a 5 gr. %</td></tr><tr><td>Calcio (Ca++)</td><td>2.8 a 13 gr. %</td></tr><tr><td>Hierro</td><td>1.3 a 1.6 g %</td></tr><tr><td>Fósforo (P₂O₅)</td><td>1.5 a 5 gr. %</td></tr><tr><td>Potasio (K₂O)</td><td>1.5 a 3.5 gr. %</td></tr><tr><td>Conductividad</td><td>3 a 4 mm hos/cm (así aparece en el manual)</td></tr><tr><td>Humedad</td><td>30 a 40 %</td></tr><tr><td>Cadmio</td><td>4 partes por millón (según cuadro)</td></tr><tr><td>Plomo</td><td>250 partes por millón</td></tr><tr><td>Mercurio</td><td>3 partes por millón</td></tr><tr><td>Cromo</td><td>25 partes por millón</td></tr></tbody></table><p style="font-size:10px;color:#79837b">El cuadro original también incluye cenizas, fracción orgánica y carga bacteriana, pero algunos signos o unidades no se distinguen con claridad en la copia digital.</p><div class="callout ochre"><strong>Precaución:</strong> no utilices estos valores como límites regulatorios o como análisis de un lote. Para tomar decisiones de uso o comercialización se requiere un análisis de laboratorio y consultar la regulación aplicable.</div></section>
+      <section class="lesson-section"><h2>El aporte al suelo</h2><p>El manual presenta el humus como un mejorador de alta calidad, utilizado para la nutrición y reparación de suelos. Su valor está vinculado tanto a los nutrientes como a la actividad biológica que acompaña la descomposición de la materia orgánica.</p><details class="reflection"><summary>¿Por qué el manual no define la calidad del humus solamente por sus nutrientes?</summary><p>Porque también destaca la “carga microbiana”: la presencia de microorganismos que participan en la descomposición de la materia orgánica y producen sustancias que favorecen el desarrollo vegetal.</p></details></section>`
+    },
+    {
+      id:'cuidados', icon:'🪴', title:'Cuidados del lombricompostador', short:'Aplicar las recomendaciones básicas de mantenimiento que incluye el manual.', time:'9 min',
+      intro:'Un lombricompostador requiere constancia: humedad, aireación, ubicación y cercanía a la fuente de residuos.',
+      content:`
+      <section class="lesson-section"><h2>Cuatro cuidados cotidianos</h2><p>El último capítulo práctico del manual se concentra en recomendaciones sencillas para mantener el lombricompostador casero.</p><div class="resource-list">
+      <div class="resource-item"><span>💧</span><div><strong>1. Tener agua cerca</strong><small>El manual recomienda contar con una fuente de agua para mantener la humedad necesaria. Recuerda que el texto indica que el cuerpo de la lombriz contiene aproximadamente 75% de agua.</small></div></div>
+      <div class="resource-item"><span>🌬️</span><div><strong>2. Cuidar la aireación del lecho</strong><small>El alimento debe conservar una estructura esponjosa para evitar la putrefacción.</small></div></div>
+      <div class="resource-item"><span>🌤️</span><div><strong>3. Elegir bien la ubicación</strong><small>El documento recomienda un sitio que reciba sol matutino y que no quede expuesto al sol de la tarde.</small></div></div>
+      <div class="resource-item"><span>🥬</span><div><strong>4. Mantenerlo cerca de la fuente de alimento</strong><small>La cercanía facilita alimentar las lombrices con regularidad.</small></div></div>
+      </div></section>
+      <section class="lesson-section"><h2>Una rutina de observación</h2><p>El manual no propone un calendario de mantenimiento ni una frecuencia fija de riego o alimentación. A partir de sus recomendaciones, puedes adoptar una rutina de observación sin confundirla con una pauta textual del documento:</p><ul><li>Observar si el lecho conserva humedad.</li><li>Revisar que el material no esté apelmazado y que conserve una estructura aireada.</li><li>Verificar que el lombricompostador no reciba el sol fuerte de la tarde.</li><li>Revisar el tipo y estado del material orgánico que se incorpora.</li><li>Observar la presencia de planarias, hormigas, aves o roedores.</li></ul><div class="callout"><strong>El propio cierre del manual:</strong> la experiencia se construye en el andar; ante un problema, invita a no desanimarse y a seguir aprendiendo.</div></section>
+      <section class="lesson-section"><h2>Una precisión importante</h2><p>Aunque el título del capítulo habla de elaboración y cuidados, las páginas disponibles no desarrollan planos, dimensiones, materiales ni un procedimiento paso a paso para construir el recipiente. Esta lección presenta solamente los cuidados que sí aparecen en el documento.</p><details class="reflection"><summary>¿Qué cuatro aspectos recomienda cuidar el manual?</summary><p>Disponibilidad de agua para mantener la humedad, aireación del lecho, ubicación con sol matutino sin sol de tarde y cercanía a la fuente de alimento.</p></details></section>`
+    },
+    {
+      id:'recursos', icon:'📚', title:'Recursos y cierre', short:'Consultar la procedencia del material y cerrar el recorrido de aprendizaje.', time:'5 min',
+      intro:'Este espacio reúne los datos editoriales y las referencias bibliográficas incluidas en la publicación original.',
+      content:`
+      <section class="lesson-section"><h2>Sobre el manual</h2><p><strong>Manual de lombricultura en casa</strong><br>Adrián Fabricio León Castro<br>Revisión y corrección: Mario Sánchez<br>Cuidado de la edición: Cristina Martínez<br>Dibujos y diseño: Rafael Rodríguez<br>Azoteas Verdes de Guadalajara, 2013.</p><p>La publicación incluye la invitación a compartir libremente el material. En su presentación, Azoteas Verdes se describe como un colectivo multidisciplinario que promueve la soberanía alimentaria, la economía solidaria, la agricultura orgánica urbana, las ecotecnias, el consumo responsable y el cuidado ambiental.</p></section>
+      <section class="lesson-section"><h2>Bibliografía incluida</h2><div class="resource-list">
+      <div class="resource-item"><span>📘</span><div><strong>Arnold Pineda, J. (2006)</strong><small><em>Lombricultura</em>. Instituto Hondureño del Café, Tegucigalpa, Honduras. El manual incluye una dirección web para consulta.</small></div></div>
+      <div class="resource-item"><span>📗</span><div><strong>Crespo González, M. R. (2006)</strong><small><em>El oro café de la agricultura. Composta: teoría y práctica del reciclado de residuos orgánicos</em>. Morelia, Michoacán.</small></div></div>
+      <div class="resource-item"><span>📙</span><div><strong>Mejía Araya, P. (s. f.)</strong><small><em>Agroflor: Manual lombricultura</em>. Chile.</small></div></div>
+      <div class="resource-item"><span>📕</span><div><strong>Reines Álvarez, M.; Loza Llamas, J. A.; Honorio Contreras, S. (2001)</strong><small><em>Lombricultura, una biotecnología para la sustentabilidad</em>. Fundación Produce Jalisco, A. C. y Universidad de Guadalajara.</small></div></div>
+      </div><p style="font-size:10px;color:#79837b">Las referencias se transcriben de la bibliografía que aparece en la edición de 2013. No se han añadido enlaces externos.</p></section>
+      <section class="lesson-section"><h2>Para continuar aprendiendo</h2><p>La lombricultura no se agota en una lectura. El manual invita a comenzar, observar el proceso y aprender de la experiencia. Cada residuo orgánico que se separa y cada lecho que se cuida puede convertirse en una oportunidad para regenerar suelo y fortalecer prácticas de aprovechamiento en casa.</p><div class="callout"><strong>Fin del recorrido:</strong> al completar las lecciones, habrás revisado los temas principales del <em>Manual de lombricultura en casa</em>.</div></section>`
+    }
+  ];
+
+  function loadState(){
+    try{const raw=localStorage.getItem(STORAGE_KEY);if(raw){const parsed=JSON.parse(raw);state={...state,...parsed};if(!Array.isArray(state.completed))state.completed=[];}}
+    catch(e){console.warn('No fue posible leer el progreso local.',e);}
+  }
+  function saveState(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){console.warn('No fue posible guardar los datos en este navegador.',e);}}
+  function esc(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  function initials(name){return (name||'A').trim().split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase()||'A';}
+  function updateProfileUI(){
+    const name=state.profile?.name||'Estudiante';
+    $('sideStudentName').textContent=name;$('avatarInitial').textContent=initials(name);
+    $('studentName').value=state.profile?.name||'';$('studentPhone').value=state.profile?.phone||'';$('studentEmail').value=state.profile?.email||'';
+  }
+  function progress(){return Math.round((state.completed.length/lessons.length)*100);}
+  function updateProgress(){
+    const pct=progress();$('topProgress').style.width=pct+'%';$('topPercent').textContent=pct+'%';
+  }
+  function renderNav(){
+    const nav=$('courseNav');
+    nav.innerHTML=`<button class="nav-btn ${state.active==='home'?'active':''}" data-id="home"><span class="nav-icon">⌂</span><span>Resumen del aula</span></button><div class="side-label">Unidades del curso</div>`+
+      lessons.map((l,i)=>`<button class="nav-btn ${state.active===l.id?'active':''}" data-id="${l.id}"><span class="nav-icon">${l.icon}</span><span>${i+1}. ${l.title}</span><span class="nav-count">${state.completed.includes(l.id)?'✓':''}</span></button>`).join('');
+    nav.querySelectorAll('[data-id]').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.id)));
+  }
+  function renderHome(){
+    const done=state.completed.length;
+    $('crumb').textContent='Inicio';
+    $('view').innerHTML=`<div class="welcome-line"><span>Hola, ${esc((state.profile?.name||'').split(' ')[0]||'estudiante')} · Este es tu espacio de aprendizaje</span><span>Curso autogestivo</span></div>
+      <section class="hero"><div class="hero-copy"><div class="eyebrow">Aula de aprendizaje · Agricultura urbana</div><h1>Lombricultura<br>en casa</h1><p>Aprende a aprovechar los residuos orgánicos, conocer a las lombrices y cuidar un sistema que devuelve materia orgánica al suelo.</p><div class="hero-meta"><span>◷ Aproximadamente 1 h 52 min de lectura</span><span>▣ ${lessons.length} unidades</span><span>✦ A tu propio ritmo</span></div></div>
+      <div class="hero-art"><svg viewBox="0 0 260 220" fill="none" role="img" aria-label="Ilustración de una planta, suelo y lombriz"><path d="M27 179H235" stroke="#d8e4cd" stroke-width="2" stroke-linecap="round"/><path d="M131 177C130 139 123 103 137 66" stroke="#c6d9b5" stroke-width="5" stroke-linecap="round"/><path d="M135 103C101 101 81 82 85 54C113 52 138 72 135 103Z" fill="#8ea97b" stroke="#d8e4cd" stroke-width="2"/><path d="M138 82C140 48 166 29 196 34C201 64 172 86 138 82Z" fill="#b3c79f" stroke="#d8e4cd" stroke-width="2"/><path d="M91 172C93 149 114 139 130 155C145 139 165 146 169 164C173 181 153 190 130 186C111 191 89 188 91 172Z" fill="#a76c48" stroke="#edc6a4" stroke-width="2"/><path d="M102 163C115 154 127 158 136 166M98 176C113 166 133 171 147 180" stroke="#6f4935" stroke-width="3" stroke-linecap="round"/><circle cx="168" cy="147" r="3" fill="#e1bd83"/><circle cx="185" cy="163" r="4" fill="#e1bd83"/><circle cx="78" cy="159" r="3" fill="#e1bd83"/></svg></div></section>
+      <div class="stats-grid"><div class="stat"><div class="stat-icon">📘</div><div><strong>${lessons.length}</strong><small>Unidades para recorrer</small></div></div><div class="stat"><div class="stat-icon">✓</div><div><strong>${done} / ${lessons.length}</strong><small>Lecciones completadas</small></div></div><div class="stat"><div class="stat-icon">🌱</div><div><strong>${progress()}%</strong><small>Avance del curso</small></div></div></div>
+      <div class="section-heading"><div><h2>Ruta de aprendizaje</h2><p>Selecciona una unidad para entrar a su contenido.</p></div></div>
+      <div class="module-grid">${lessons.map((l,i)=>`<button class="module-card ${state.completed.includes(l.id)?'done':''}" data-id="${l.id}"><span class="module-emoji">${l.icon}</span><span style="min-width:0"><h3>${i+1}. ${l.title}</h3><p>${l.short}</p><span class="module-foot"><i class="dot"></i>${state.completed.includes(l.id)?'Completada':'Por revisar'} · ${l.time}</span></span></button>`).join('')}</div>
+      <p class="source-note">Contenido elaborado a partir del <em>Manual de lombricultura en casa</em>, de Adrián Fabricio León Castro, Azoteas Verdes de Guadalajara (2013). Los esquemas de esta aula son ilustraciones didácticas.</p>`;
+    $('view').querySelectorAll('.module-card').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.id)));
+    updateProgress();
+  }
+  function renderLesson(id){
+    const index=lessons.findIndex(l=>l.id===id);if(index<0){renderHome();return;}
+    const lesson=lessons[index],done=state.completed.includes(id),prev=lessons[index-1],next=lessons[index+1];
+    $('crumb').textContent=lesson.title;
+    $('view').innerHTML=`<div class="lesson-head"><div><div class="lesson-kicker">Unidad ${index+1} de ${lessons.length} · ${lesson.time}</div><h1>${lesson.icon} ${lesson.title}</h1><p>${lesson.intro}</p></div><div class="lesson-actions"><button class="secondary" id="backHome">← Resumen</button></div></div>
+      <div class="lesson-layout"><article class="lesson-main">${lesson.content}<div class="lesson-footer"><button class="complete-btn ${done?'done':''}" id="completeLesson">${done?'✓ Lección completada':'Marcar como completada ✓'}</button>${next?`<button class="next-btn" id="nextLesson">Siguiente unidad →</button>`:`<button class="next-btn" id="backSummary">Volver al resumen →</button>`}</div></article>
+      <aside class="side-info"><div class="info-card"><h3>Tu recorrido</h3><p>${state.completed.length} de ${lessons.length} unidades completadas</p><div class="lesson-progress"><span style="width:${progress()}%"></span></div><p><strong>${progress()}%</strong> de avance total</p></div><div class="info-card"><h3>En esta unidad</h3><p>Tiempo estimado: ${lesson.time}</p><p>Lee el contenido, abre las preguntas de reflexión y marca la unidad al terminar.</p></div><div class="info-card"><h3>Anterior / siguiente</h3><ul>${prev?`<li><button class="text-btn" style="color:var(--leaf)" data-go="${prev.id}">← ${prev.title}</button></li>`:''}${next?`<li><button class="text-btn" style="color:var(--leaf)" data-go="${next.id}">${next.title} →</button></li>`:''}</ul></div></aside></div>`;
+    $('backHome').addEventListener('click',()=>navigate('home'));
+    $('completeLesson').addEventListener('click',()=>{if(state.completed.includes(id))state.completed=state.completed.filter(x=>x!==id);else state.completed.push(id);saveState();renderNav();renderLesson(id);updateProgress();});
+    if(next)$('nextLesson').addEventListener('click',()=>navigate(next.id));else $('backSummary').addEventListener('click',()=>navigate('home'));
+    $('view').querySelectorAll('[data-go]').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.go)));
+    updateProgress();
+  }
+  function navigate(id){
+    state.active=id;saveState();renderNav();if(id==='home')renderHome();else renderLesson(id);
+    $('sidebar').classList.remove('open');$('mobileOverlay').classList.remove('show');
+    if(window.matchMedia('(max-width:760px)').matches)$('view').focus({preventScroll:true});
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  $('registration').addEventListener('submit',e=>{
+    e.preventDefault();
+    const profile={name:$('studentName').value.trim(),phone:$('studentPhone').value.trim(),email:$('studentEmail').value.trim()};
+    if(!profile.name||!profile.phone||!profile.email){return;}
+    state.profile=profile;saveState();$('gate').hidden=true;$('app').hidden=false;updateProfileUI();navigate(state.active||'home');
+  });
+  $('changeStudent').addEventListener('click',()=>{$('app').hidden=true;$('gate').hidden=false;updateProfileUI();$('studentName').focus();});
+  $('menuToggle').addEventListener('click',()=>{$('sidebar').classList.add('open');$('mobileOverlay').classList.add('show');});
+  $('mobileOverlay').addEventListener('click',()=>{$('sidebar').classList.remove('open');$('mobileOverlay').classList.remove('show');});
+
+  loadState();
+  updateProfileUI();
+  // La pantalla de registro se muestra antes de entrar, incluso si ya hay un perfil guardado.
+  $('gate').hidden=false;$('app').hidden=true;
+})();
+</script>
+</body>
+</html>
