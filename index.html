@@ -210,7 +210,7 @@ html,body{max-width:100%;overflow-x:hidden}
       <label class="field"><span>Teléfono</span><div class="phone-box"><select id="studentCountry" class="country-select" aria-label="Lada del país"><option value="+52">🇲🇽 +52</option><option value="+1">🇺🇸 +1</option><option value="+34">🇪🇸 +34</option><option value="+502">🇬🇹 +502</option><option value="+503">🇸🇻 +503</option><option value="+504">🇭🇳 +504</option><option value="+505">🇳🇮 +505</option><option value="+506">🇨🇷 +506</option><option value="+507">🇵🇦 +507</option><option value="+53">🇨🇺 +53</option><option value="+57">🇨🇴 +57</option><option value="+58">🇻🇪 +58</option><option value="+51">🇵🇪 +51</option><option value="+593">🇪🇨 +593</option><option value="+591">🇧🇴 +591</option><option value="+56">🇨🇱 +56</option><option value="+54">🇦🇷 +54</option><option value="+595">🇵🇾 +595</option><option value="+598">🇺🇾 +598</option><option value="+55">🇧🇷 +55</option></select><input id="studentPhone" name="phone" type="tel" placeholder="Tu número de contacto" autocomplete="tel" inputmode="tel" required maxlength="20"></div></label>
       <label class="field"><span>Correo electrónico</span><input id="studentEmail" name="email" type="email" placeholder="tunombre@correo.com" autocomplete="email" required maxlength="120"></label>
       <button class="primary full" type="submit">Entrar al aula <span aria-hidden="true">→</span></button>
-                <div class="privacy"><strong>Sobre tus datos:</strong> al registrarte, tu nombre, teléfono y correo se guardan en una hoja de cálculo de Google que administra Axkan Koujta. Esos datos sirven únicamente para dar seguimiento a tu participación en el aula y no se comparten con terceros. Tu avance de lecciones se guarda en el navegador que estás usando, por eso conviene entrar siempre desde el mismo dispositivo. Si quieres que tus datos se eliminen, pídelo a la persona que coordina el aula.</div>
+                <div class="privacy"><strong>Sobre tus datos:</strong> al registrarte, tu nombre, teléfono y correo se guardan en una hoja de cálculo de Google que administra Axkan Koujta. Esos datos sirven únicamente para dar seguimiento a tu participación en el aula y no se comparten con terceros. Tu avance en las unidades se guarda en la hoja de cálculo y también en el navegador que estás usando. Así la coordinación puede dar seguimiento a tu participación. Si quieres que tus datos se eliminen, pídelo a la persona que coordina el aula.</div>
     </form>
   </div>
 </section>
@@ -480,7 +480,7 @@ html,body{max-width:100%;overflow-x:hidden}
       <div class="lesson-layout"><article class="lesson-main">${lesson.content}<div class="lesson-footer"><button class="complete-btn ${done?'done':''}" id="completeLesson">${done?'✓ Lección completada':'Marcar como completada ✓'}</button>${next?`<button class="next-btn" id="nextLesson">Siguiente unidad →</button>`:`<button class="next-btn" id="backSummary">Volver al resumen →</button>`}</div></article>
       <aside class="side-info"><div class="info-card"><h3>Tu recorrido</h3><p>${state.completed.length} de ${lessons.length} unidades completadas</p><div class="lesson-progress"><span style="width:${progress()}%"></span></div><p><strong>${progress()}%</strong> de avance total</p></div><div class="info-card"><h3>En esta unidad</h3><p>Tiempo estimado: ${lesson.time}</p><p>Lee el contenido, abre las preguntas de reflexión y marca la unidad al terminar.</p></div><div class="info-card"><h3>Anterior / siguiente</h3><ul>${prev?`<li><button class="text-btn" style="color:var(--leaf)" data-go="${prev.id}">← ${prev.title}</button></li>`:''}${next?`<li><button class="text-btn" style="color:var(--leaf)" data-go="${next.id}">${next.title} →</button></li>`:''}</ul></div></aside></div>`;
     $('backHome').addEventListener('click',()=>navigate('home'));
-    $('completeLesson').addEventListener('click',()=>{if(state.completed.includes(id))state.completed=state.completed.filter(x=>x!==id);else state.completed.push(id);saveState();renderNav();renderLesson(id);updateProgress();});
+    $('completeLesson').addEventListener('click',()=>{if(state.completed.includes(id))state.completed=state.completed.filter(x=>x!==id);else state.completed.push(id);saveState();enviarAvance();renderNav();renderLesson(id);updateProgress();});
     if(next)$('nextLesson').addEventListener('click',()=>navigate(next.id));else $('backSummary').addEventListener('click',()=>navigate('home'));
     $('view').querySelectorAll('[data-go]').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.go)));
     updateProgress();
@@ -498,6 +498,13 @@ html,body{max-width:100%;overflow-x:hidden}
       body:JSON.stringify({nombre:p.name,telefono:p.phone,correo:p.email})})
       .then(()=>{state.enviadoCorreo=p.email;saveState();})
       .catch(err=>console.warn('No fue posible enviar el registro.',err));
+  }
+  function enviarAvance(){
+    if(!state.profile)return;
+    fetch(REGISTRO_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({tipo:'avance',nombre:state.profile.name,correo:state.profile.email,
+        completadas:state.completed,unidades:lessons.map(l=>({id:l.id,titulo:l.title}))})})
+      .catch(err=>console.warn('No fue posible guardar el avance.',err));
   }
   $('registration').addEventListener('submit',e=>{
     e.preventDefault();
